@@ -43,6 +43,24 @@
       box-shadow: 0 0 15px #00ff00;
       white-space: pre-wrap;
     }
+    #start-btn {
+      display: block;
+      margin: 30px auto;
+      padding: 12px 25px;
+      background: #00ff00;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ff00;
+      transition: 0.2s;
+    }
+    #start-btn:hover {
+      background: #00cc00;
+      box-shadow: 0 0 20px #00ff00;
+    }
     /* Matrix background */
     #matrix {
       position: fixed;
@@ -65,12 +83,15 @@
 
 <section id="profile">
   <h2>Profil Terminal</h2>
+  <button id="start-btn">▶ Activer le terminal</button>
   <div class="card">
     <pre id="profile-terminal"></pre>
   </div>
 </section>
+
 <script>
   const terminal = document.getElementById("profile-terminal");
+  const startBtn = document.getElementById("start-btn");
 
   const profileLines = [
     "===============================",
@@ -86,15 +107,23 @@
   let line = 0;
   let char = 0;
 
+  // Fonction voix
   function speak(text) {
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "fr-FR"; 
       utterance.rate = 1.1;
+
+      const voices = speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        utterance.voice = voices.find(v => v.lang === "fr-FR") || voices[0];
+      }
+
       window.speechSynthesis.speak(utterance);
     }
   }
 
+  // Fonction écriture ligne par ligne
   function typeLine() {
     if (line < profileLines.length) {
       if (char < profileLines[line].length) {
@@ -103,7 +132,6 @@
         setTimeout(typeLine, 40);
       } else {
         terminal.textContent += "\n";
-        // 🔥 On ne lit pas les lignes qui ne sont que des "="
         if (!/^=+$/.test(profileLines[line])) {
           speak(profileLines[line]);
         }
@@ -114,7 +142,16 @@
     }
   }
 
-  typeLine();
+  // Attente clic utilisateur pour activer voix + terminal
+  startBtn.addEventListener("click", () => {
+    startBtn.style.display = "none"; // cacher bouton
+    typeLine();
+  });
+
+  // Chargement des voix disponibles
+  window.speechSynthesis.onvoiceschanged = () => {
+    console.log("Voices loaded:", speechSynthesis.getVoices());
+  };
 </script>
 </body>
 </html>
