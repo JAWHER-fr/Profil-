@@ -69,7 +69,49 @@
     <pre id="profile-terminal"></pre>
   </div>
 </section>
+
 <script>
+  /***********************
+   * MATRIX BACKGROUND
+   ***********************/
+  const canvas = document.getElementById("matrix");
+  const ctx = canvas.getContext("2d");
+
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+
+  const letters = "01";
+  const fontSize = 16;
+  const columns = canvas.width / fontSize;
+  const drops = [];
+
+  for (let x = 0; x < columns; x++) {
+    drops[x] = 1;
+  }
+
+  function draw() {
+    ctx.fillStyle = "rgba(0,0,0,0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#0F0";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = letters.charAt(Math.floor(Math.random() * letters.length));
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  setInterval(draw, 35);
+
+  /***********************
+   * TERMINAL + VOICE
+   ***********************/
   const terminal = document.getElementById("profile-terminal");
 
   const profileLines = [
@@ -78,8 +120,7 @@
     "Name: Jawher Dridi",
     "Status: Student at ISI Kef",
     "Email: dridijawherr@gmail.com",
-    "Interests: Web Development, Cybersecurity",
-    "Age : 21",
+    "Interests: Web Development, Cybersecurity, Creativity",
     "===============================",
     "✅ Profile Loaded Successfully"
   ];
@@ -90,8 +131,8 @@
   function speak(text) {
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "fr-FR"; 
-      utterance.rate = 1.1;
+      utterance.lang = "fr-FR"; // voix française
+      utterance.rate = 1.1; // vitesse
       window.speechSynthesis.speak(utterance);
     }
   }
@@ -104,10 +145,8 @@
         setTimeout(typeLine, 40);
       } else {
         terminal.textContent += "\n";
-        // 🔥 On ne lit pas les lignes qui ne sont que des "="
-        if (!/^=+$/.test(profileLines[line])) {
-          speak(profileLines[line]);
-        }
+        // Parler chaque ligne
+        speak(profileLines[line]);
         line++;
         char = 0;
         setTimeout(typeLine, 300);
@@ -117,7 +156,6 @@
 
   typeLine();
 </script>
-
 
 </body>
 </html>
