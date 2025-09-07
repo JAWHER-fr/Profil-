@@ -48,11 +48,11 @@
       overflow-x: auto; /* ✅ pour éviter que le texte déborde sur mobile */
     }
     .profile-img {
-      width: 180px;
-      max-width: 100%;
+      width: 120px;
+      max-width: 50%;
       border-radius: 50%;
       border: 3px solid #00ff00;
-      margin-bottom: 20px;
+      margin-top: 0px;
       box-shadow: 0 0 15px #00ff00;
     }
     #start-btn {
@@ -90,7 +90,7 @@
 <canvas id="matrix"></canvas>
 
 <header>
-  <h1>Hacker Zone - Jawher Dridi</h1>
+  <h1>Jawher Dridi</h1>
 </header>
 
 <section id="profile">
