@@ -42,10 +42,18 @@
       border-radius: 10px;
       box-shadow: 0 0 15px #00ff00;
       white-space: pre-wrap;
+      text-align: center;
+    }
+    .profile-img {
+      width: 200px;
+      border-radius: 50%;
+      border: 3px solid #00ff00;
+      margin-bottom: 20px;
+      box-shadow: 0 0 15px #00ff00;
     }
     #start-btn {
       display: block;
-      margin: 30px auto;
+      margin: 20px auto;
       padding: 12px 25px;
       background: #00ff00;
       color: #000;
@@ -85,11 +93,51 @@
   <h2>Profil Terminal</h2>
   <button id="start-btn">▶ Activer le terminal</button>
   <div class="card">
+    <!-- 📸 Ici tu peux mettre ta photo -->
+    <img src="jawher.jpg" alt="Photo de Jawher Dridi" class="profile-img">
     <pre id="profile-terminal"></pre>
   </div>
 </section>
 
 <script>
+  /***********************
+   * MATRIX BACKGROUND
+   ***********************/
+  const canvas = document.getElementById("matrix");
+  const ctx = canvas.getContext("2d");
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+
+  const letters = "アカサタナハマヤラワ0123456789";
+  const fontSize = 16;
+  let columns = Math.floor(canvas.width / fontSize);
+  let drops = Array(columns).fill(1);
+
+  function drawMatrix() {
+    ctx.fillStyle = "rgba(0,0,0,0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = letters.charAt(Math.floor(Math.random() * letters.length));
+      ctx.fillStyle = "#0F0";
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+      drops[i]++;
+    }
+  }
+  setInterval(drawMatrix, 35);
+
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    columns = Math.floor(canvas.width / fontSize);
+    drops = Array(columns).fill(1);
+  });
+
+  /***********************
+   * TERMINAL + VOIX
+   ***********************/
   const terminal = document.getElementById("profile-terminal");
   const startBtn = document.getElementById("start-btn");
 
@@ -107,23 +155,19 @@
   let line = 0;
   let char = 0;
 
-  // Fonction voix
   function speak(text) {
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "fr-FR"; 
+      utterance.lang = "fr-FR";
       utterance.rate = 1.1;
-
       const voices = speechSynthesis.getVoices();
       if (voices.length > 0) {
         utterance.voice = voices.find(v => v.lang === "fr-FR") || voices[0];
       }
-
       window.speechSynthesis.speak(utterance);
     }
   }
 
-  // Fonction écriture ligne par ligne
   function typeLine() {
     if (line < profileLines.length) {
       if (char < profileLines[line].length) {
@@ -142,13 +186,11 @@
     }
   }
 
-  // Attente clic utilisateur pour activer voix + terminal
   startBtn.addEventListener("click", () => {
-    startBtn.style.display = "none"; // cacher bouton
+    startBtn.style.display = "none";
     typeLine();
   });
 
-  // Chargement des voix disponibles
   window.speechSynthesis.onvoiceschanged = () => {
     console.log("Voices loaded:", speechSynthesis.getVoices());
   };
