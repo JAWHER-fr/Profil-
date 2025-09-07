@@ -97,7 +97,7 @@
   <h2>Profil Terminal</h2>
   <button id="start-btn">▶ Activer le terminal</button>
   <div class="card">
-    <img src="jawher.jpg" alt="Photo de Jawher Dridi" class="profile-img">
+    <img src="1756550933593.jpg" alt="Photo de Jawher Dridi" class="profile-img">
     <pre id="profile-terminal"></pre>
   </div>
 </section>
