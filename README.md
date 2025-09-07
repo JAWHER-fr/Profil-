@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hacker Zone - Jawher Dridi</title>
   <style>
     * {
@@ -13,7 +14,7 @@
     body {
       background: #000;
       color: #00ff00;
-      overflow: hidden;
+      /* ❌ on supprime overflow: hidden pour permettre le scroll */
     }
     header {
       background: #111;
@@ -22,7 +23,7 @@
       border-bottom: 2px solid #00ff00;
     }
     header h1 {
-      font-size: 2.5rem;
+      font-size: 2rem;
       text-shadow: 0 0 10px #00ff00;
     }
     section {
@@ -34,6 +35,7 @@
       text-align: center;
       margin-bottom: 20px;
       text-shadow: 0 0 10px #00ff00;
+      font-size: 1.5rem;
     }
     .card {
       background: #111;
@@ -43,9 +45,11 @@
       box-shadow: 0 0 15px #00ff00;
       white-space: pre-wrap;
       text-align: center;
+      overflow-x: auto; /* ✅ pour éviter que le texte déborde sur mobile */
     }
     .profile-img {
-      width: 200px;
+      width: 180px;
+      max-width: 100%;
       border-radius: 50%;
       border: 3px solid #00ff00;
       margin-bottom: 20px;
@@ -59,7 +63,7 @@
       color: #000;
       border: none;
       border-radius: 8px;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
       box-shadow: 0 0 10px #00ff00;
@@ -93,8 +97,7 @@
   <h2>Profil Terminal</h2>
   <button id="start-btn">▶ Activer le terminal</button>
   <div class="card">
-    <!-- 📸 Ici tu peux mettre ta photo -->
-    <img src="1756550933593.jpg" alt="Photo de Jawher Dridi" class="profile-img">
+    <img src="jawher.jpg" alt="Photo de Jawher Dridi" class="profile-img">
     <pre id="profile-terminal"></pre>
   </div>
 </section>
