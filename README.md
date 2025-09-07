@@ -11,50 +11,66 @@
       box-sizing: border-box;
       font-family: 'Courier New', monospace;
     }
+
     body {
       background: #000;
       color: #00ff00;
-      /* ❌ on supprime overflow: hidden pour permettre le scroll */
     }
+
     header {
       background: #111;
       padding: 20px;
       text-align: center;
       border-bottom: 2px solid #00ff00;
     }
+
     header h1 {
       font-size: 2rem;
       text-shadow: 0 0 10px #00ff00;
     }
+
     section {
       padding: 40px 20px;
       max-width: 900px;
       margin: auto;
     }
+
     h2 {
       text-align: center;
       margin-bottom: 20px;
       text-shadow: 0 0 10px #00ff00;
       font-size: 1.5rem;
     }
+
     .card {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 20px;
       background: #111;
       border: 1px solid #00ff00;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 15px #00ff00;
-      white-space: pre-wrap;
-      text-align: center;
-      overflow-x: auto; /* ✅ pour éviter que le texte déborde sur mobile */
+      flex-wrap: wrap; /* permet l'empilement sur mobile */
     }
+
     .profile-img {
-      width: 120px;
-      max-width: 50%;
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
       border-radius: 50%;
       border: 3px solid #00ff00;
-      margin-top: 0px;
       box-shadow: 0 0 15px #00ff00;
     }
+
+    .terminal {
+      flex: 1;
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
     #start-btn {
       display: block;
       margin: 20px auto;
@@ -69,10 +85,12 @@
       box-shadow: 0 0 10px #00ff00;
       transition: 0.2s;
     }
+
     #start-btn:hover {
       background: #00cc00;
       box-shadow: 0 0 20px #00ff00;
     }
+
     /* Matrix background */
     #matrix {
       position: fixed;
@@ -98,7 +116,7 @@
   <button id="start-btn">▶ Activer le terminal</button>
   <div class="card">
     <img src="1756550933593.jpg" alt="Photo de Jawher Dridi" class="profile-img">
-    <pre id="profile-terminal"></pre>
+    <pre id="profile-terminal" class="terminal"></pre>
   </div>
 </section>
 
@@ -198,5 +216,6 @@
     console.log("Voices loaded:", speechSynthesis.getVoices());
   };
 </script>
+
 </body>
 </html>
