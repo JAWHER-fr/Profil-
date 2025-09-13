@@ -15,7 +15,7 @@
     @keyframes pulse { 0%{text-shadow:0 0 12px #ff4da6}50%{text-shadow:0 0 28px #ff99cc}100%{text-shadow:0 0 12px #ff4da6} }
     .btn {
       background:#ff4da6; color:#111; border:none; padding:10px 16px; border-radius:8px;
-      font-size:1rem; cursor:pointer; box-shadow:0 0 12px #ff99cc; margin-top:20px;
+      font-size:1rem; cursor:pointer; box-shadow:0 0 12px #ff99cc; margin-top:20px; margin-right:10px;
     }
     /* Overlay vidéo */
     #video-overlay {
@@ -41,8 +41,9 @@
   <h2 style="text-align:center; margin-bottom:12px; text-shadow:0 0 10px #ff4da6;">💻 Terminal de mon Cœur</h2>
   <div class="card"><pre id="profile-terminal"></pre></div>
 
-  <!-- Bouton vidéo -->
+  <!-- Boutons -->
   <div style="text-align:center;">
+    <button id="play-voice" class="btn">🔊 Écouter le message</button>
     <button id="video-btn" class="btn">🎬 Voir la vidéo</button>
   </div>
 </section>
@@ -84,18 +85,15 @@ function typeLine() {
       line++; ch = 0;
       setTimeout(typeLine, 300);
     }
-  } else {
-    // Fin d'écriture → lancer la voix
-    playVoiceAuto();
   }
 }
 typeLine();
 
-/* ---------- Lecture vocale automatique ---------- */
+/* ---------- Lecture vocale avec bouton ---------- */
 function getSpeechText() {
   return profileLines.filter(l => !/^=+$/.test(l)).join(" ");
 }
-function playVoiceAuto() {
+function playVoice() {
   if ('speechSynthesis' in window) {
     const utterance = new SpeechSynthesisUtterance(getSpeechText());
     utterance.lang = "fr-FR";
@@ -103,13 +101,12 @@ function playVoiceAuto() {
     const voices = speechSynthesis.getVoices();
     const frenchVoice = voices.find(v => v.lang.startsWith("fr"));
     if (frenchVoice) utterance.voice = frenchVoice;
-
-    // Petit hack pour Chrome/Edge : créer un événement utilisateur invisible
-    const clickEvt = new MouseEvent('click');
-    document.body.dispatchEvent(clickEvt); 
     speechSynthesis.speak(utterance);
+  } else {
+    alert("Votre navigateur ne supporte pas la synthèse vocale.");
   }
 }
+document.getElementById("play-voice").addEventListener("click", playVoice);
 
 /* ---------- Bouton vidéo ---------- */
 const videoBtn = document.getElementById("video-btn");
