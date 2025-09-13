@@ -23,7 +23,6 @@
     }
     #video-overlay div { position:relative; max-width:90%; width:700px; }
     #close-video { position:absolute; top:-40px; right:-10px; font-size:2rem; cursor:pointer; color:#ff4da6; }
-    #auto-video { display:none; }
   </style>
 </head>
 <body>
@@ -51,12 +50,17 @@
   </div>
 </div>
 
-<!-- Vidéo cachée pour lecture automatique -->
-<video id="auto-video" autoplay>
-  <source src="eff382e089ea5d50f7e0772d4e14d7b3_1757729299093.mp4" type="video/mp4">
-</video>
-
 <script>
+/* ---------- Demande autorisation pour lecture vocale ---------- */
+let userAllowed = false;
+function askPermission() {
+  const allow = confirm("Cliquez sur OK pour autoriser la lecture automatique du message après l'écriture.");
+  if(allow){
+    userAllowed = true;
+    typeLine(); // Commence la dactylographie
+  }
+}
+
 /* ---------- Texte + dactylographie ---------- */
 const terminal = document.getElementById('profile-terminal');
 const profileLines = [
@@ -83,12 +87,23 @@ function typeLine() {
       setTimeout(typeLine, 300);
     }
   } else {
-    // Fin d'écriture → lecture automatique via vidéo
-    const autoVideo = document.getElementById('auto-video');
-    autoVideo.play().catch(()=>console.log("Lecture automatique bloquée, interagir avec la page"));
+    // Fin de l'écriture → lancer lecture vocale si autorisé
+    if(userAllowed) playVoice();
   }
 }
-typeLine();
+
+/* ---------- Lecture vocale ---------- */
+function getSpeechText() {
+  return profileLines.filter(l => !/^=+$/.test(l)).join(" ");
+}
+function playVoice() {
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(getSpeechText());
+    utterance.lang = "fr-FR";
+    utterance.rate = 1.05;
+    speechSynthesis.speak(utterance);
+  }
+}
 
 /* ---------- Bouton vidéo complète ---------- */
 const videoBtn = document.getElementById("video-btn");
@@ -134,6 +149,9 @@ function draw() {
   }
 }
 setInterval(draw, 80);
+
+/* ---------- Démarrage après autorisation ---------- */
+window.addEventListener('load', askPermission);
 </script>
 
 </body>
