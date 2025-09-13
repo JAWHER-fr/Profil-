@@ -1,4 +1,4 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -44,23 +44,6 @@
       box-shadow: 0 0 20px #ff4da6, 0 0 40px #ff99cc;
       white-space: pre-wrap;
     }
-    #listen-btn {
-      display: block;
-      margin: 20px auto;
-      padding: 12px 24px;
-      font-size: 1.2rem;
-      border: none;
-      border-radius: 10px;
-      background: #ff4da6;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 0 15px #ff99cc;
-      transition: transform 0.2s;
-    }
-    #listen-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px #ff4da6, 0 0 40px #ff99cc;
-    }
     /* Matrix background love edition */
     #matrix {
       position: fixed;
@@ -91,12 +74,10 @@
   <div class="card">
     <pre id="profile-terminal"></pre>
   </div>
-  <button id="listen-btn">💌 Écouter la déclaration</button>
 </section>
 
 <script>
   const terminal = document.getElementById("profile-terminal");
-  const listenBtn = document.getElementById("listen-btn");
 
   const profileLines = [
     "===============================",
@@ -113,7 +94,25 @@
   let line = 0;
   let char = 0;
 
-  // Fonction qui tape les lignes une par une
+  // Fonction vocale
+  function speakMessage() {
+    if ('speechSynthesis' in window) {
+      const text = profileLines
+        .filter(l => !/^=+$/.test(l)) // enlever les lignes de séparation
+        .join(" ");
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "fr-FR";
+      utterance.rate = 1.05;
+
+      const voices = window.speechSynthesis.getVoices();
+      const frenchVoice = voices.find(v => v.lang.startsWith("fr"));
+      if (frenchVoice) utterance.voice = frenchVoice;
+
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  // Effet dactylographie
   function typeLine() {
     if (line < profileLines.length) {
       if (char < profileLines[line].length) {
@@ -126,29 +125,13 @@
         char = 0;
         setTimeout(typeLine, 300);
       }
+    } else {
+      // 👉 Quand tout est fini, lancer la voix
+      speakMessage();
     }
   }
 
   typeLine();
-
-  // Lecture vocale quand on clique
-  listenBtn.addEventListener("click", () => {
-    if ('speechSynthesis' in window) {
-      const text = profileLines
-        .filter(l => !/^=+$/.test(l)) // On enlève les lignes de séparateur
-        .join(" ");
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "fr-FR";
-      utterance.rate = 1.05;
-
-      // Choisir une voix FR si dispo
-      const voices = window.speechSynthesis.getVoices();
-      const frenchVoice = voices.find(v => v.lang.startsWith("fr"));
-      if (frenchVoice) utterance.voice = frenchVoice;
-
-      window.speechSynthesis.speak(utterance);
-    }
-  });
 
   // Matrix style avec des cœurs
   const canvas = document.getElementById("matrix");
