@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
@@ -29,6 +29,10 @@
       position:absolute; top:-40px; right:-10px; font-size:2rem;
       cursor:pointer; color:#ff4da6;
     }
+    /* Vidéo cachée pour lecture automatique */
+    #auto-video {
+      display:none;
+    }
   </style>
 </head>
 <body>
@@ -41,14 +45,13 @@
   <h2 style="text-align:center; margin-bottom:12px; text-shadow:0 0 10px #ff4da6;">💻 Terminal de mon Cœur</h2>
   <div class="card"><pre id="profile-terminal"></pre></div>
 
-  <!-- Boutons -->
+  <!-- Bouton pour voir la vidéo complète -->
   <div style="text-align:center;">
-    <button id="play-voice" class="btn">🔊 Écouter le message</button>
     <button id="video-btn" class="btn">🎬 Voir la vidéo</button>
   </div>
 </section>
 
-<!-- Overlay vidéo -->
+<!-- Overlay vidéo complète -->
 <div id="video-overlay">
   <div>
     <span id="close-video">✖</span>
@@ -58,6 +61,11 @@
     </video>
   </div>
 </div>
+
+<!-- Vidéo cachée pour lecture automatique après l'écriture -->
+<video id="auto-video" autoplay>
+  <source src="eff382e089ea5d50f7e0772d4e14d7b3_1757729299093.mp4" type="video/mp4">
+</video>
 
 <script>
 /* ---------- Texte + dactylographie ---------- */
@@ -85,30 +93,15 @@ function typeLine() {
       line++; ch = 0;
       setTimeout(typeLine, 300);
     }
+  } else {
+    // Fin d'écriture → lancer la vidéo avec voix pré-enregistrée
+    const autoVideo = document.getElementById('auto-video');
+    autoVideo.play().catch(()=>console.log("Lecture automatique bloquée, interagir avec la page"));
   }
 }
 typeLine();
 
-/* ---------- Lecture vocale avec bouton ---------- */
-function getSpeechText() {
-  return profileLines.filter(l => !/^=+$/.test(l)).join(" ");
-}
-function playVoice() {
-  if ('speechSynthesis' in window) {
-    const utterance = new SpeechSynthesisUtterance(getSpeechText());
-    utterance.lang = "fr-FR";
-    utterance.rate = 1.05;
-    const voices = speechSynthesis.getVoices();
-    const frenchVoice = voices.find(v => v.lang.startsWith("fr"));
-    if (frenchVoice) utterance.voice = frenchVoice;
-    speechSynthesis.speak(utterance);
-  } else {
-    alert("Votre navigateur ne supporte pas la synthèse vocale.");
-  }
-}
-document.getElementById("play-voice").addEventListener("click", playVoice);
-
-/* ---------- Bouton vidéo ---------- */
+/* ---------- Bouton vidéo complète ---------- */
 const videoBtn = document.getElementById("video-btn");
 const videoOverlay = document.getElementById("video-overlay");
 const closeVideo = document.getElementById("close-video");
