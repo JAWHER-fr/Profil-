@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -87,6 +87,7 @@
     "Message : Depuis que je t’ai rencontrée,",
     "           chaque jour est une lumière dans ma vie.",
     "           Je t’aime plus que les mots ne peuvent le dire.",
+    "Si les jours ne nous rassemblent pas, les souvenirs le feront, et si le cœur ne te voit pas, l'œil ne t'oubliera pas.",
     "===============================",
     "💖 Forever & Always 💖"
   ];
