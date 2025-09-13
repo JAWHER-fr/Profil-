@@ -67,7 +67,7 @@ const terminal = document.getElementById('profile-terminal');
 const profileLines = [
   "===============================",
   "📂 Initialisation du cœur...",
-  "Amourr: Jawher",
+  "from: Jawher",
   "to: Ikhlass ❤️",
   "Message : Depuis que je t’ai rencontrée,",
   "           chaque jour est une lumière dans ma vie.",
