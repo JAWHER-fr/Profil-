@@ -15,20 +15,15 @@
     @keyframes pulse { 0%{text-shadow:0 0 12px #ff4da6}50%{text-shadow:0 0 28px #ff99cc}100%{text-shadow:0 0 12px #ff4da6} }
     .btn {
       background:#ff4da6; color:#111; border:none; padding:10px 16px; border-radius:8px;
-      font-size:1rem; cursor:pointer; box-shadow:0 0 12px #ff99cc; margin-top:20px;
+      font-size:1rem; cursor:pointer; box-shadow:0 0 12px #ff99cc; margin-top:20px; margin-right:10px;
     }
-    /* Overlay vidéo */
     #video-overlay {
       display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85);
       justify-content:center; align-items:center; z-index:3000;
     }
-    #video-overlay div {
-      position:relative; max-width:90%; width:700px;
-    }
-    #close-video {
-      position:absolute; top:-40px; right:-10px; font-size:2rem;
-      cursor:pointer; color:#ff4da6;
-    }
+    #video-overlay div { position:relative; max-width:90%; width:700px; }
+    #close-video { position:absolute; top:-40px; right:-10px; font-size:2rem; cursor:pointer; color:#ff4da6; }
+    #auto-video { display:none; }
   </style>
 </head>
 <body>
@@ -41,13 +36,11 @@
   <h2 style="text-align:center; margin-bottom:12px; text-shadow:0 0 10px #ff4da6;">💻 Terminal de mon Cœur</h2>
   <div class="card"><pre id="profile-terminal"></pre></div>
 
-  <!-- Bouton vidéo -->
   <div style="text-align:center;">
     <button id="video-btn" class="btn">🎬 Voir la vidéo</button>
   </div>
 </section>
 
-<!-- Overlay vidéo -->
 <div id="video-overlay">
   <div>
     <span id="close-video">✖</span>
@@ -57,6 +50,11 @@
     </video>
   </div>
 </div>
+
+<!-- Vidéo cachée pour lecture automatique -->
+<video id="auto-video" autoplay>
+  <source src="eff382e089ea5d50f7e0772d4e14d7b3_1757729299093.mp4" type="video/mp4">
+</video>
 
 <script>
 /* ---------- Texte + dactylographie ---------- */
@@ -85,33 +83,14 @@ function typeLine() {
       setTimeout(typeLine, 300);
     }
   } else {
-    // Fin d'écriture → lancer la voix
-    playVoiceAuto();
+    // Fin d'écriture → lecture automatique via vidéo
+    const autoVideo = document.getElementById('auto-video');
+    autoVideo.play().catch(()=>console.log("Lecture automatique bloquée, interagir avec la page"));
   }
 }
 typeLine();
 
-/* ---------- Lecture vocale automatique ---------- */
-function getSpeechText() {
-  return profileLines.filter(l => !/^=+$/.test(l)).join(" ");
-}
-function playVoiceAuto() {
-  if ('speechSynthesis' in window) {
-    const utterance = new SpeechSynthesisUtterance(getSpeechText());
-    utterance.lang = "fr-FR";
-    utterance.rate = 1.05;
-    const voices = speechSynthesis.getVoices();
-    const frenchVoice = voices.find(v => v.lang.startsWith("fr"));
-    if (frenchVoice) utterance.voice = frenchVoice;
-
-    // Petit hack pour Chrome/Edge : créer un événement utilisateur invisible
-    const clickEvt = new MouseEvent('click');
-    document.body.dispatchEvent(clickEvt); 
-    speechSynthesis.speak(utterance);
-  }
-}
-
-/* ---------- Bouton vidéo ---------- */
+/* ---------- Bouton vidéo complète ---------- */
 const videoBtn = document.getElementById("video-btn");
 const videoOverlay = document.getElementById("video-overlay");
 const closeVideo = document.getElementById("close-video");
