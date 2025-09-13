@@ -73,7 +73,6 @@ const profileLines = [
   "           chaque jour est une lumière dans ma vie.",
   "           Je t’aime plus que les mots ne peuvent le dire.",
   "SOUS LA GARDE DE DIEU,IKHLASS",
-  ,"باش نتوحشك برشا ☺️"
   " Forever & Always ♥️",
 ];
 
