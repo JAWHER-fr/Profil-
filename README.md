@@ -84,7 +84,8 @@ const allowVoiceBtn = document.getElementById('allow-voice');
 allowVoiceBtn.addEventListener('click', () => {
   userAllowed = true;
   voiceOverlay.style.display = 'none';
-  typeLine(); // Commence la dactylographie
+  playVoice();   // 🔊 Lance la voix directement
+  typeLine();    // ⌨️ Commence la dactylographie en parallèle
 });
 
 /* ---------- Dactylographie ---------- */
@@ -98,8 +99,6 @@ function typeLine() {
       line++; ch = 0;
       setTimeout(typeLine, 300);
     }
-  } else {
-    if(userAllowed) playVoice();
   }
 }
 
@@ -112,6 +111,7 @@ function playVoice() {
     const utterance = new SpeechSynthesisUtterance(getSpeechText());
     utterance.lang = "fr-FR";
     utterance.rate = 1.05;
+    speechSynthesis.cancel(); // 🔄 Annule toute lecture en cours
     speechSynthesis.speak(utterance);
   }
 }
