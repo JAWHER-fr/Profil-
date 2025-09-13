@@ -33,7 +33,7 @@
 
 <canvas id="matrix"></canvas>
 
-<header><h1>💌 Pour Toi, Mon Amour</h1></header>
+<header><h1>💌 Pour Toi, Mon AM🙂</h1></header>
 
 <section>
   <h2 style="text-align:center; margin-bottom:12px; text-shadow:0 0 10px #ff4da6;">💻 Terminal de mon Cœur</h2>
@@ -72,7 +72,7 @@ const profileLines = [
   "Message : Depuis que je t’ai rencontrée,",
   "           chaque jour est une lumière dans ma vie.",
   "           Je t’aime plus que les mots ne peuvent le dire.",
-  "===============================",
+  "SOUS LA GARDE DE DIEU,IKHLASS",
   "💖 Forever & Always 💖"
 ];
 
