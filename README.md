@@ -59,8 +59,8 @@
     </video>
     <!-- 👉 Pour YouTube, remplace <video>...</video> par :
     <iframe width="100%" height="400" 
-      src="https://www.youtube.com/embed/VIDEO_ID" 
-      frameborder="0" allowfullscreen></iframe>
+      src="eff382e089ea5d50f7e0772d4e14d7b3_1757729299093.mp4" 
+      frameborder="0" allowfullscreen></ifhttps
     -->
   </div>
 </div>
