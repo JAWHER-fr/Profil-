@@ -5,7 +5,7 @@
   <title>💜 Love Zone - Pour Toi</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    * { box-sizing: border-box; margin:0; padding:0; font-family: "Courier New", monospace; }
+    * { box-sizing: border-box; margin:0; padding:0; font-family:"Courier New", monospace; }
     body { background: radial-gradient(circle at center, #2a002a, #000); color:#ff4da6; min-height:100vh; overflow:hidden; }
     header { text-align:center; padding:22px; border-bottom:2px solid #ff4da6; background: rgba(0,0,0,0.5); }
     header h1 { font-size:2.4rem; text-shadow:0 0 15px #ff4da6; animation:pulse 2s infinite; }
@@ -41,8 +41,9 @@
   <h2 style="text-align:center; margin-bottom:12px; text-shadow:0 0 10px #ff4da6;">💻 Terminal de mon Cœur</h2>
   <div class="card"><pre id="profile-terminal"></pre></div>
 
-  <!-- Bouton vidéo -->
+  <!-- Boutons -->
   <div style="text-align:center;">
+    <button id="play-voice" class="btn">🔊 Écouter le message</button>
     <button id="video-btn" class="btn">🎬 Voir la vidéo</button>
   </div>
 </section>
@@ -84,29 +85,28 @@ function typeLine() {
       line++; ch = 0;
       setTimeout(typeLine, 300);
     }
-  } else {
-    // fin d’écriture → lancer la voix
-    playVoice();
   }
 }
 typeLine();
 
 /* ---------- Lecture vocale ---------- */
+function getSpeechText() {
+  return profileLines.filter(l => !/^=+$/.test(l)).join(" ");
+}
 function playVoice() {
-  if (!('speechSynthesis' in window)) return;
-  const text = profileLines.filter(l => !/^=+$/.test(l)).join(' ');
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'fr-FR';
-  u.rate = 1.05;
-  const voices = speechSynthesis.getVoices();
-  const french = voices.find(v => v.lang.startsWith('fr'));
-  if (french) u.voice = french;
-  try {
-    speechSynthesis.speak(u);
-  } catch(e) {
-    console.warn("Lecture vocale bloquée par le navigateur. Clique pour autoriser.");
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(getSpeechText());
+    utterance.lang = "fr-FR";
+    utterance.rate = 1.05;
+    const voices = speechSynthesis.getVoices();
+    const frenchVoice = voices.find(v => v.lang.startsWith("fr"));
+    if (frenchVoice) utterance.voice = frenchVoice;
+    speechSynthesis.speak(utterance);
+  } else {
+    alert("Votre navigateur ne supporte pas la synthèse vocale.");
   }
 }
+document.getElementById("play-voice").addEventListener("click", playVoice);
 
 /* ---------- Bouton vidéo ---------- */
 const videoBtn = document.getElementById("video-btn");
