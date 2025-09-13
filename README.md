@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     * { box-sizing: border-box; margin:0; padding:0; font-family:"Courier New", monospace; }
-    body { background: radial-gradient(circle at center, #2a002a, #000); color:#ff4da6; min-height:100vh; overflow:hidden; cursor:pointer; }
+    body { background: radial-gradient(circle at center, #2a002a, #000); color:#ff4da6; min-height:100vh; overflow:hidden; }
     header { text-align:center; padding:22px; border-bottom:2px solid #ff4da6; background: rgba(0,0,0,0.5); }
     header h1 { font-size:2.4rem; text-shadow:0 0 15px #ff4da6; animation:pulse 2s infinite; }
     section { max-width:900px; margin:32px auto; padding:20px; }
@@ -16,6 +16,10 @@
     .btn {
       background:#ff4da6; color:#111; border:none; padding:10px 16px; border-radius:8px;
       font-size:1rem; cursor:pointer; box-shadow:0 0 12px #ff99cc; margin-top:20px; margin-right:10px;
+    }
+    #voice-permission {
+      position:fixed; inset:0; display:flex; justify-content:center; align-items:center;
+      background:rgba(0,0,0,0.85); z-index:5000; flex-direction:column;
     }
     #video-overlay {
       display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85);
@@ -50,17 +54,15 @@
   </div>
 </div>
 
-<script>
-/* ---------- Autorisation vocale par clic ---------- */
-let userAllowed = false;
-function enableVoice() {
-  userAllowed = true;
-  document.body.removeEventListener('click', enableVoice);
-  typeLine(); // Commence l'écriture après autorisation
-}
-document.body.addEventListener('click', enableVoice);
+<!-- Fenêtre pour demander autorisation vocale -->
+<div id="voice-permission">
+  <h2>🔊 Activer la lecture automatique du message</h2>
+  <button id="allow-voice" class="btn">Cliquer pour autoriser</button>
+</div>
 
-/* ---------- Texte + dactylographie ---------- */
+<script>
+/* ---------- Variables ---------- */
+let userAllowed = false;
 const terminal = document.getElementById('profile-terminal');
 const profileLines = [
   "===============================",
@@ -75,6 +77,17 @@ const profileLines = [
 ];
 
 let line = 0, ch = 0;
+
+/* ---------- Autorisation vocale via bouton ---------- */
+const voiceOverlay = document.getElementById('voice-permission');
+const allowVoiceBtn = document.getElementById('allow-voice');
+allowVoiceBtn.addEventListener('click', () => {
+  userAllowed = true;
+  voiceOverlay.style.display = 'none';
+  typeLine(); // Commence la dactylographie
+});
+
+/* ---------- Dactylographie ---------- */
 function typeLine() {
   if (line < profileLines.length) {
     if (ch < profileLines[line].length) {
