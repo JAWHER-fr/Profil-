@@ -17,7 +17,6 @@
       background:#ff4da6; color:#111; border:none; padding:10px 16px; border-radius:8px;
       font-size:1rem; cursor:pointer; box-shadow:0 0 12px #ff99cc; margin-top:20px;
     }
-
     /* Overlay vidéo */
     #video-overlay {
       display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85);
@@ -42,7 +41,7 @@
   <h2 style="text-align:center; margin-bottom:12px; text-shadow:0 0 10px #ff4da6;">💻 Terminal de mon Cœur</h2>
   <div class="card"><pre id="profile-terminal"></pre></div>
 
-  <!-- Bouton pour voir la vidéo -->
+  <!-- Bouton vidéo -->
   <div style="text-align:center;">
     <button id="video-btn" class="btn">🎬 Voir la vidéo</button>
   </div>
@@ -52,16 +51,10 @@
 <div id="video-overlay">
   <div>
     <span id="close-video">✖</span>
-    <!-- Exemple avec une vidéo locale -->
     <video id="love-video" width="100%" controls>
-      <source src="video.mp4" type="video/mp4">
+      <source src="eff382e089ea5d50f7e0772d4e14d7b3_1757729299093.mp4" type="video/mp4">
       Ton navigateur ne supporte pas la vidéo.
     </video>
-    <!-- 👉 Pour YouTube, remplace <video>...</video> par :
-    <iframe width="100%" height="400" 
-      src="eff382e089ea5d50f7e0772d4e14d7b3_1757729299093.mp4" 
-      frameborder="0" allowfullscreen></ifhttps
-    -->
   </div>
 </div>
 
@@ -92,27 +85,27 @@ function typeLine() {
       setTimeout(typeLine, 300);
     }
   } else {
-    // tout tapé -> tenter la lecture
-    trySpeak();
+    // fin d’écriture → lancer la voix
+    playVoice();
   }
 }
 typeLine();
 
 /* ---------- Lecture vocale ---------- */
-function buildSpeechText() {
-  return profileLines.filter(l => !/^=+$/.test(l)).join(' ');
-}
-function trySpeak() {
+function playVoice() {
   if (!('speechSynthesis' in window)) return;
-  const u = new SpeechSynthesisUtterance(buildSpeechText());
+  const text = profileLines.filter(l => !/^=+$/.test(l)).join(' ');
+  const u = new SpeechSynthesisUtterance(text);
   u.lang = 'fr-FR';
   u.rate = 1.05;
   const voices = speechSynthesis.getVoices();
   const french = voices.find(v => v.lang.startsWith('fr'));
   if (french) u.voice = french;
   try {
-    window.speechSynthesis.speak(u);
-  } catch(e) { console.warn("Lecture bloquée : interaction requise"); }
+    speechSynthesis.speak(u);
+  } catch(e) {
+    console.warn("Lecture vocale bloquée par le navigateur. Clique pour autoriser.");
+  }
 }
 
 /* ---------- Bouton vidéo ---------- */
@@ -123,10 +116,10 @@ const video = document.getElementById("love-video");
 
 videoBtn.addEventListener("click", () => {
   videoOverlay.style.display = "flex";
-  if (video) video.play();
+  video.play();
 });
 closeVideo.addEventListener("click", () => {
-  if (video) video.pause();
+  video.pause();
   videoOverlay.style.display = "none";
 });
 
