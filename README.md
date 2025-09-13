@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     * { box-sizing: border-box; margin:0; padding:0; font-family:"Courier New", monospace; }
-    body { background: radial-gradient(circle at center, #2a002a, #000); color:#ff4da6; min-height:100vh; overflow:hidden; }
+    body { background: radial-gradient(circle at center, #2a002a, #000); color:#ff4da6; min-height:100vh; overflow:hidden; cursor:pointer; }
     header { text-align:center; padding:22px; border-bottom:2px solid #ff4da6; background: rgba(0,0,0,0.5); }
     header h1 { font-size:2.4rem; text-shadow:0 0 15px #ff4da6; animation:pulse 2s infinite; }
     section { max-width:900px; margin:32px auto; padding:20px; }
@@ -51,15 +51,14 @@
 </div>
 
 <script>
-/* ---------- Demande autorisation pour lecture vocale ---------- */
+/* ---------- Autorisation vocale par clic ---------- */
 let userAllowed = false;
-function askPermission() {
-  const allow = confirm("Cliquez sur OK pour autoriser la lecture automatique du message après l'écriture.");
-  if(allow){
-    userAllowed = true;
-    typeLine(); // Commence la dactylographie
-  }
+function enableVoice() {
+  userAllowed = true;
+  document.body.removeEventListener('click', enableVoice);
+  typeLine(); // Commence l'écriture après autorisation
 }
+document.body.addEventListener('click', enableVoice);
 
 /* ---------- Texte + dactylographie ---------- */
 const terminal = document.getElementById('profile-terminal');
@@ -87,7 +86,6 @@ function typeLine() {
       setTimeout(typeLine, 300);
     }
   } else {
-    // Fin de l'écriture → lancer lecture vocale si autorisé
     if(userAllowed) playVoice();
   }
 }
@@ -97,7 +95,7 @@ function getSpeechText() {
   return profileLines.filter(l => !/^=+$/.test(l)).join(" ");
 }
 function playVoice() {
-  if ('speechSynthesis' in window) {
+  if('speechSynthesis' in window){
     const utterance = new SpeechSynthesisUtterance(getSpeechText());
     utterance.lang = "fr-FR";
     utterance.rate = 1.05;
@@ -149,9 +147,6 @@ function draw() {
   }
 }
 setInterval(draw, 80);
-
-/* ---------- Démarrage après autorisation ---------- */
-window.addEventListener('load', askPermission);
 </script>
 
 </body>
