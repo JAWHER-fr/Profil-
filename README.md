@@ -41,9 +41,8 @@
   <h2 style="text-align:center; margin-bottom:12px; text-shadow:0 0 10px #ff4da6;">💻 Terminal de mon Cœur</h2>
   <div class="card"><pre id="profile-terminal"></pre></div>
 
-  <!-- Boutons -->
+  <!-- Bouton vidéo -->
   <div style="text-align:center;">
-    <button id="play-voice" class="btn">🔊 Écouter le message</button>
     <button id="video-btn" class="btn">🎬 Voir la vidéo</button>
   </div>
 </section>
@@ -85,15 +84,18 @@ function typeLine() {
       line++; ch = 0;
       setTimeout(typeLine, 300);
     }
+  } else {
+    // Fin d'écriture → lancer la voix
+    playVoiceAuto();
   }
 }
 typeLine();
 
-/* ---------- Lecture vocale ---------- */
+/* ---------- Lecture vocale automatique ---------- */
 function getSpeechText() {
   return profileLines.filter(l => !/^=+$/.test(l)).join(" ");
 }
-function playVoice() {
+function playVoiceAuto() {
   if ('speechSynthesis' in window) {
     const utterance = new SpeechSynthesisUtterance(getSpeechText());
     utterance.lang = "fr-FR";
@@ -101,12 +103,13 @@ function playVoice() {
     const voices = speechSynthesis.getVoices();
     const frenchVoice = voices.find(v => v.lang.startsWith("fr"));
     if (frenchVoice) utterance.voice = frenchVoice;
+
+    // Petit hack pour Chrome/Edge : créer un événement utilisateur invisible
+    const clickEvt = new MouseEvent('click');
+    document.body.dispatchEvent(clickEvt); 
     speechSynthesis.speak(utterance);
-  } else {
-    alert("Votre navigateur ne supporte pas la synthèse vocale.");
   }
 }
-document.getElementById("play-voice").addEventListener("click", playVoice);
 
 /* ---------- Bouton vidéo ---------- */
 const videoBtn = document.getElementById("video-btn");
