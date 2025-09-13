@@ -33,7 +33,7 @@
 
 <canvas id="matrix"></canvas>
 
-<header><h1>💌 Pour Toi, Mon AM🙂</h1></header>
+<header><h1>💌 Pour Toi, IKHLASS</h1></header>
 
 <section>
   <h2 style="text-align:center; margin-bottom:12px; text-shadow:0 0 10px #ff4da6;">💻 Terminal de mon Cœur</h2>
@@ -67,13 +67,13 @@ const terminal = document.getElementById('profile-terminal');
 const profileLines = [
   "===============================",
   "📂 Initialisation du cœur...",
-  "from: Jawher",
+  "Amourr: Jawher",
   "to: Ikhlass ❤️",
   "Message : Depuis que je t’ai rencontrée,",
   "           chaque jour est une lumière dans ma vie.",
   "           Je t’aime plus que les mots ne peuvent le dire.",
-  "SOUS LA GARDE DE DIEU,IKHLASS",
-  " Forever & Always ♥️",
+  "باش نتوحشك برشا☺️",
+  " Forever & Always 💖"
 ];
 
 let line = 0, ch = 0;
