@@ -69,9 +69,9 @@ const profileLines = [
   "📂 Initialisation du cœur...",
   "from: Jawher",
   "to: Ikhlass ❤️",
-  "Message : Depuis que je t’ai rencontrée,",
-  "           chaque jour est une lumière dans ma vie.",
-  "           Je t’aime plus que les mots ne peuvent le dire.",
+  "Message : Je t'aimerai sans communication,sans messages,comme ça de loin,",
+  "et si tu es loin de moi, vous vous rencontrerez dans mon imagination.",
+  "Je t’aime plus que les mots ne peuvent le dire.",
   "باش نتوحشك برشا☺️",
   " Forever & Always 💖",
   "SOU LA GARDE DE DIEU"
